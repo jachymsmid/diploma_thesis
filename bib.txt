@@ -1,0 +1,18 @@
+Roskovec, “Numerické Řešení Nelineárních Problémů Konvekce-Difuze Pomocí Adaptivních Metod”;
+
+Roskovec and Vlasák, “On Runge-Kutta, Collocation and Discontinuous Galerkin Methods: Mutual Connections and Resulting Consequences to the Analysis”;
+
+Thomée, Galerkin Finite Element Methods for Parabolic Problems;
+
+Baccouch, “The Discontinuous Galerkin Finite Element Method for Ordinary Differential Equations”;
+
+Huynh, “Discontinuous Galerkin and Related Methods for ODE”;
+
+Delfour et al., “Discontinuous Galerkin Methods for Ordinary Differential Equations”;
+
+Schötzau and Schwab, “An Hp a Priori Error Analysis of the DG Time-Stepping Method for Initial Value Problems”;
+
+Johnson, “Error Estimates and Adaptive Time-Step Control for a Class of One-Step Methods for Stiff Ordinary Differential Equations”;
+
+Estep and Stuart, “The Dynamical Behavior of the Discontinuous Galerkin Method and Related Difference Schemes.”
+
