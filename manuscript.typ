@@ -46,46 +46,65 @@
 
 = Discontinuous Galerkin Method for ODE 
 
-Suppose the following initial value problem
+== Polynomial spaces
+
+=== Degrees of freedom
+
+=== Broken polynomial spaces
+
+#definition[Broken polynomial space][Given a mesh $cal(T)$ we define a broken polynomial space of order $p$ as a set
 $
-u^' (t) + A u(t) = f(t),\
-u(0) = u_0.
+PP_p (cal(T)) = {v in L^2 (Omega) med : med v bar.v_K in PP_p (K), med forall K in cal(T)}
+$]
+
+#definition[Jump][Let $PP_p (cal(T))$ be a broken polynomial space on mesh $cal(T)$. A jump is defnied as
 $
-Here $A = lambda > 0$ is a real constant, $u$ is a function $u: chevron.l 0,T chevron.r mapsto RR$.
+[u] = ...
+$]
+
+#definition[Trace][]
+
+#definition[Numerical trace][]
+
+#lemma[][
+$
+dim (PP_p (cal(T)) inter H^1 (cal(T))) = |cal(T)| dot.op p - 1
+$]
+
 
 == Weak formulation
 
-=== Weak derivative
+=== Integration by parts (per-partes)
+
+=== Weak and distributional derivatives
 
 #definition[Weak derivative][
 Let $u$ be a function in $L^1(Omega)$. We say that $g in L^1(Omega)$ satisfying
 $
 integral_Omega g phi dif x = integral_Omega u phi^' dif t quad forall phi in cal(C)^infinity_0 (Omega),
 $
-is the weak derivative of $u$.
+is a weak derivative of $u$.
 ]
 
-#remark[There exists only one weak derivative.]
-
-#proof[][
-  For the sake of proof by contradiction let $g_1 eq.not g_2$ be the weak derivatives for the function $u in L^1(Omega)$. Using the identity
-  $
-  integral_Omega g_1 phi dif x = integral_Omega g_2 phi dif x
-  $
-  we arrive at
-  $
-  integral_Omega g_1 phi dif x - integral_Omega g_2 phi dif x = 0\
-  integral_Omega phi (g_1 - g_2) dif x = 0.
-  $
-  But if this were to hold for all $phi$ the term in parentheses must be equal to zero
-  $
-  g_1 - g_2 = 0\
-  g_1 = g_2 quad arrow.zigzag
-  $
-  
+#definition[Distributional derivative][
+$
+chevron.l D u, phi chevron.r = - integral_Omega u phi^' dif x
+$
+$D u$ is the distributional derivative.
 ]
 
-=== hmmm
+#definition[Broken derivative][We define broken derivative as a derivative on each cell ignoring the discontinuous interfaces.]
+
+#lemma[Distributional derivative over broken polynomial space][
+Distributional derivative over broken polynomial space can be defined as
+$
+chevron.l D u, phi chevron.r = integral_Omega D_h u dif x + sum [u]_n delta_n
+$
+]
+
+
+
+=== Weak formulation 
 
 To obtain the weak formulation of our problem we test with an infinitely differentiable funciton $v in C^infinity$
 $
@@ -110,14 +129,119 @@ using the scalar product in the Lebesque space for $p = 2$.
 
 == Domain discretization
 
-To discretize the domain $Omega = chevron.l 0, T chevron.r$ we define a sectioning
+To discretize the domain $Omega = chevron.l 0, T chevron.r$ we divide it into intervals
 $
 I_n = (t_n, t_(n+1)), quad n = 0,1,dots,N,
 $
-where $t_0 = 0$ and $t_N = T$, $tau_n = t_(n+1) - t_n$ is a local time step. Thus the approximate domain can be defined as
+where $t_0 = 0$ and $t_N = T$, $tau_n = t_(n+1) - t_n$ is a local time step.
+Now we define a mesh as
 $
-Omega approx Omega_tau = union.big_(n=0)^(N-1) I_n
+cal(T) = {I_i med : med i lt.eq n} = { I_1, I_2, dots, I_N}
+$
+Thus the approximate domain can be defined as
+$
+Omega approx Omega_tau = union.big cal(T) = union.big_(n=0)^(N-1) I_n
 $
 
+=== Regular
+$tau$ stays constant.
+
+=== Irregular
+$tau_n$ is different for each $I_n$.
+
+=== Reference element
+
+== Polynomials
+
+== Spaces
+
+=== Lebesque space
+
+#definition[Lebesque space][
+  A Lebesque space is a space of square integrable functions
+  $
+  L^2 (Omega) = {f med : med integral_Omega |f|^2 dif x < infinity}
+  $
+  
+]
+
+=== Sobolev space
+
+#definition[Sobolev space][
+We define Sobolev space as
+$
+H^1(Omega) = {f in L^2 (Omega) med : med D f in L^2 (Omega)}
+$
+]
+
+#lemma[][
+  Let $f in PP_p (cal(T))$. If $f in H^1 (Omega)$ then for every jump $[f]_n = 0$.
 
 
+]
+
+
+== Numerical quadrature
+
+== DGM derivation
+
+First lets derive the simplest case possible and generelize it later. Suppose the following initial value problem
+$
+u^' (t) + A u(t) = f(t),\
+u(0) = u_0.
+$
+Here $A = lambda > 0$ is a real constant, $u$ is a function $u: chevron.l 0,T chevron.r mapsto RR$.
+
+The weak formulation of this problem is
+$
+- integral_Omega u v^' dif t + [u v]bar.v_Omega + integral_Omega A u v dif t = integral_Omega f v dif t.
+$
+First approximate the domain $Omega$ by $Omega_tau$. For simplicity suppose regular intervals.
+
+Now we approximate by defining the trial and test space to be the broken polynomial space with $p=0$ (constant functions).
+
+$
+- integral_Omega u_h v^'_h dif t + [u_h v_h]bar.v_Omega + integral_Omega A u_h v_h dif t = integral_Omega f v_h dif t\
+$
+
+Now the local (on the interval $I_n$) weak formulation becomes
+$
+- integral_I_n u_h v^'_h dif t + [u_h v_h]bar.v_I_n+ integral_I_n A u_h v_h dif t = integral_I_n f v_h dif t\
+- integral_I_n u_h v^'_h dif t + u_h (t_n^-) v_h (t_n^-) - u_h (t_(n-1)^+) v_h (t_(n-1)^+) + integral_I_n A u_h v_h dif t = integral_I_n f v_h dif t
+$
+
+Using the upwind numerical trace
+$
+hat(U)_n = u_h (t_n^-)
+$
+we obtain the final integral DGM formulation
+$
+- integral_I_n u_h v^'_h dif t + hat(U)_n v_h (t_n^-) - hat(U)_(n-1) v_h (t_(n-1)^+) + integral_I_n A u_h v_h dif t = integral_I_n f v_h dif t
+$
+Equivalent formulation can be obtained by usign integration by parts again on the first integral
+$
+integral_I_n u^'_h v_h dif t - u_h (t_n^-) v_h (t_n^-) + u_h (t_(n-1)^+) v_h (t_(n-1)^+) + hat(U)_n v_h (t_n^-) - hat(U)_(n-1) v_h (t_(n-1)^+) + \ quad +integral_I_n A u_h v_h dif t = integral_I_n f v_h dif t\
+integral_I_n u^'_h v_h dif t - u_h (t_n^-) v_h (t_n^-) + u_h (t_(n-1)^+) v_h (t_(n-1)^+) + u_h (t_n^-) v_h (t_n^-) - u_h (t_(n-1)) v_h (t_(n-1)^+) + \ quad +integral_I_n A u_h v_h dif t = integral_I_n f v_h dif t\
+integral_I_n u^'_h v_h dif t + [u_h (t_(n-1)^+) - u_h (t_(n-1)^-)] v_h (t_(n-1)^+) + integral_I_n A u_h v_h dif t = integral_I_n f v_h dif t\
+integral_I_n (u^'_h + A u_h)v_h dif t + [u_h (t_(n-1)^+) - u_h (t_(n-1)^-)] v_h (t_(n-1)^+) = integral_I_n f v_h dif t
+$
+
+=== Energy equivalence
+$
+E = 1/2 u^2
+$
+
+=== Algorithm
+
+==== Results
+
+=== Connection to Runge-Kutta methods
+
+=== Superconvergrence
+
+=== A priori error estimation
+
+
+
+
+= Discontinuous Galerkin method for parabolic PDE
