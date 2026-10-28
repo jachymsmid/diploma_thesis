@@ -96,15 +96,13 @@ $D u$ is the distributional derivative.
 #definition[Broken derivative][We define broken derivative as a derivative on each cell ignoring the discontinuous interfaces.]
 
 #lemma[Distributional derivative over broken polynomial space][
-Distributional derivative over broken polynomial space can be defined as
+Distributional derivative over broken polynomial space is equal to
 $
 chevron.l D u, phi chevron.r = integral_Omega D_h u dif x + sum [u]_n delta_n
 $
 ]
 
-
-
-=== Weak formulation 
+=== Weak formulation
 
 To obtain the weak formulation of our problem we test with an infinitely differentiable funciton $v in C^infinity$
 $
@@ -118,13 +116,19 @@ $
 and apply the integration by parts on the first integral
 $
 - integral_Omega u dot.op v^' dif t + [u dot.op v]bar.v_Omega + integral_Omega A u dot.op v dif t = integral_Omega f dot.op v dif t\
-- integral_Omega u dot.op v^' dif t + integral_(partial Omega) hat(n) dot.op u dot.op v dif t + integral_Omega A u dot.op v dif t = integral_Omega f dot.op v dif t
+- integral_Omega u dot.op v^' dif t + [u dot.op v]limits(bar.v)_0^T + integral_Omega A u dot.op v dif t = integral_Omega f dot.op v dif t\
+- integral_Omega u dot.op v^' dif t + u(T)v(T) - u(0)v(0) + integral_Omega A u dot.op v dif t = integral_Omega f dot.op v dif t\
 $
-This equation can also be viewed as
+Requiring that $v$ vanishes at the right endpoint and using the information that $u(0) = u_0$ gives
 $
-- chevron.l u, v^' chevron.r_(L^2(Omega)) + chevron.l hat(n) dot.op u,v chevron.r_(L^2(partial Omega)) + chevron.l A u, v chevron.r_(L^2(Omega)) = chevron.l f, v chevron.r_(L^2(Omega)) 
+- integral_Omega u dot.op v^' dif t - u_0 dot.op v(0) + integral_Omega A u dot.op v dif t = integral_Omega f dot.op v dif t quad forall v in {f in cal(C)^infinity (0,T) med : med f(T) = 0}\
 $
-using the scalar product in the Lebesque space for $p = 2$.
+Which is the final weak formulation of the equation.
+
+Note that requiring that $v$ vanishes at both endpoints would mean that we loose the information about the initial condition.
+
+
+==== Local weak formulation
 
 
 == Domain discretization
@@ -194,14 +198,14 @@ Here $A = lambda > 0$ is a real constant, $u$ is a function $u: chevron.l 0,T ch
 
 The weak formulation of this problem is
 $
-- integral_Omega u v^' dif t + [u v]bar.v_Omega + integral_Omega A u v dif t = integral_Omega f v dif t.
+- integral_Omega u dot.op v^' dif t - u_0 dot.op v(0) + integral_Omega A u dot.op v dif t = integral_Omega f dot.op v dif t quad forall v in {f in cal(C)^infinity (0,T) med : med f(T) = 0}\
 $
 First approximate the domain $Omega$ by $Omega_tau$. For simplicity suppose regular intervals.
 
-Now we approximate by defining the trial and test space to be the broken polynomial space with $p=0$ (constant functions).
+Now we approximate the functions by defining the trial and test spaces to be the broken polynomial space of order $p.$
 
 $
-- integral_Omega u_h v^'_h dif t + [u_h v_h]bar.v_Omega + integral_Omega A u_h v_h dif t = integral_Omega f v_h dif t\
+- integral_Omega_tau u_h v^'_h dif t + [u_h v_h]bar.v_Omega_tau + integral_Omega_tau A u_h v_h dif t = integral_Omega_tau f v_h dif t quad forall v_h in PP_p (cal(T))\
 $
 
 Now the local (on the interval $I_n$) weak formulation becomes
