@@ -369,8 +369,12 @@ Equivalent formulation can be obtained by usign integration by parts again on th
 $
 integral_I_n u^'_h v_h dif t - u_h (t_n^-) v_h (t_n^-) + u_h (t_(n-1)^+) v_h (t_(n-1)^+) + hat(U)_n v_h (t_n^-) - hat(U)_(n-1) v_h (t_(n-1)^+) + \ quad +integral_I_n A u_h v_h dif t = integral_I_n f v_h dif t\
 integral_I_n u^'_h v_h dif t - u_h (t_n^-) v_h (t_n^-) + u_h (t_(n-1)^+) v_h (t_(n-1)^+) + u_h (t_n^-) v_h (t_n^-) - u_h (t_(n-1)) v_h (t_(n-1)^+) + \ quad +integral_I_n A u_h v_h dif t = integral_I_n f v_h dif t\
-integral_I_n u^'_h v_h dif t + [u_h (t_(n-1)^+) - u_h (t_(n-1)^-)] v_h (t_(n-1)^+) + integral_I_n A u_h v_h dif t = integral_I_n f v_h dif t\
-integral_I_n (u^'_h + A u_h)v_h dif t + [u_h (t_(n-1)^+) - u_h (t_(n-1)^-)] v_h (t_(n-1)^+) = integral_I_n f v_h dif t.
+integral_I_n (u^'_h + A u_h)v_h dif t + [u_h (t_(n-1)^+) - u_h (t_(n-1)^-)] v_h (t_(n-1)^+) = integral_I_n f v_h dif t\
+integral_I_n (u^'_h + A u_h)v_h dif t + [u_h]_(n-1) v_h (t_(n-1)^+) = integral_I_n f v_h dif t
+$
+Or formulated globaly
+$
+sum_n^N integral_I_n (u^'_h + A u_h)v_h dif t + sum_n^(N-1) [u_h]_n v_h (t_(n)^+) + (u_h (0^+) - u_0) v_h (0^+) = sum_n^N integral_I_n f v_h dif t
 $
 This equation contains a jump of $u_h$ on the left interface, we will denote it with $bracket.l.stroked u_h bracket.r.stroked_(n-1)$
 $
