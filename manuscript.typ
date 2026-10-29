@@ -76,7 +76,32 @@ $]
 
 === Integration by parts (per-partes)
 
-=== Weak and distributional derivatives
+#lemma[Integration by parts][
+  An integral of two functions $f$ and $g$ can be written as
+  $
+  integral_Omega f g^' dif x = - integral_Omega f^' g dif x + [f g]bar.v_Omega.
+  $
+]
+
+#proof[][
+  Take the derivative of the product of the two functions
+  $
+  (f g)^' = f^' g + f g^'
+  $
+  integrate it
+  $
+  integral_Omega (f g)^' dif x = integral_Omega f^' g dif x + integral_Omega f g^' dif x\
+  [f g]bar.v_Omega  = integral_Omega f^' g dif x + integral_Omega f g^' dif x
+  $
+  and rearrange
+  $
+  integral_Omega f g^' dif x = -integral_Omega f^' g dif x + [f g]bar.v_Omega  
+  $
+
+
+]
+
+=== Weak derivative
 
 #definition[Weak derivative][
 Let $u$ be a function in $L^1(Omega)$. We say that $g in L^1(Omega)$ satisfying
@@ -86,21 +111,6 @@ $
 is a weak derivative of $u$.
 ]
 
-#definition[Distributional derivative][
-$
-chevron.l D u, phi chevron.r = - integral_Omega u phi^' dif x
-$
-$D u$ is the distributional derivative.
-]
-
-#definition[Broken derivative][We define broken derivative as a derivative on each cell ignoring the discontinuous interfaces.]
-
-#lemma[Distributional derivative over broken polynomial space][
-Distributional derivative over broken polynomial space is equal to
-$
-chevron.l D u, phi chevron.r = integral_Omega D_h u dif x + sum [u]_n delta_n
-$
-]
 
 === Weak formulation
 
@@ -119,9 +129,9 @@ $
 - integral_Omega u dot.op v^' dif t + [u dot.op v]limits(bar.v)_0^T + integral_Omega A u dot.op v dif t = integral_Omega f dot.op v dif t\
 - integral_Omega u dot.op v^' dif t + u(T)v(T) - u(0)v(0) + integral_Omega A u dot.op v dif t = integral_Omega f dot.op v dif t\
 $
-Requiring that $v$ vanishes at the right endpoint and using the information that $u(0) = u_0$ gives
+Requiring that $v in V = {f in cal(C)^infinity (0,T) med : med f(T) = 0}$ and using the information that $u(0) = u_0$ gives
 $
-- integral_Omega u dot.op v^' dif t - u_0 dot.op v(0) + integral_Omega A u dot.op v dif t = integral_Omega f dot.op v dif t quad forall v in {f in cal(C)^infinity (0,T) med : med f(T) = 0}\
+- integral_Omega u dot.op v^' dif t - u_0 dot.op v(0) + integral_Omega A u dot.op v dif t = integral_Omega f dot.op v dif t quad forall v in V\
 $
 Which is the final weak formulation of the equation.
 
@@ -129,6 +139,11 @@ Note that requiring that $v$ vanishes at both endpoints would mean that we loose
 
 
 ==== Local weak formulation
+
+Having a domain partitioned into intervals $I_n = (t_(n-1), t_n)$, we can formulate the local weak form of the problem
+$
+- integral_I_n u dot.op v^' dif t + u(t_n)v(t_n) - u(t_(n-1))v(t_(n-1)) + integral_I_n A u dot.op v dif t = integral_I_n f dot.op v dif t forall v in V
+$
 
 
 == Domain discretization
