@@ -202,8 +202,13 @@ $
 
 == Numerical quadrature
 
+=== Radau quadrature
+
+=== Gauss quadrature
+
 == DGM derivation
 
+=== Linear homegenous 1. order ODE
 First lets derive the simplest case possible and generelize it later. Suppose the following initial value problem
 $
 u^' (t) + A u(t) = f(t),\
@@ -217,37 +222,67 @@ $
 $
 First approximate the domain $Omega$ by $Omega_tau$. For simplicity suppose regular intervals.
 
-Now we approximate the functions by defining the trial and test spaces to be the broken polynomial space of order $p.$
-
+Now we approximate the functions by defining the trial and test spaces to be the broken polynomial spaces of order $p.$
+The local (on the interval $I_n = (t_(n-1), t_n)$) weak formulation is
 $
-- integral_Omega_tau u_h v^'_h dif t + [u_h v_h]bar.v_Omega_tau + integral_Omega_tau A u_h v_h dif t = integral_Omega_tau f v_h dif t quad forall v_h in PP_p (cal(T))\
+- integral_I_n u_h v^'_h dif t + [u_h v_h]bar.v_I_n+ integral_I_n A u_h v_h dif t = integral_I_n f v_h dif t,\
+- integral_I_n u_h v^'_h dif t + u_h (t_n^-) v_h (t_n^-) - u_h (t_(n-1)^+) v_h (t_(n-1)^+) + integral_I_n A u_h v_h dif t = integral_I_n f v_h dif t.
 $
-
-Now the local (on the interval $I_n$) weak formulation becomes
-$
-- integral_I_n u_h v^'_h dif t + [u_h v_h]bar.v_I_n+ integral_I_n A u_h v_h dif t = integral_I_n f v_h dif t\
-- integral_I_n u_h v^'_h dif t + u_h (t_n^-) v_h (t_n^-) - u_h (t_(n-1)^+) v_h (t_(n-1)^+) + integral_I_n A u_h v_h dif t = integral_I_n f v_h dif t
-$
-
 Using the upwind numerical trace
 $
 hat(U)_n = u_h (t_n^-)
 $
-we obtain the final integral DGM formulation
+we obtain the local #underline[weak] discrete DGM formulation
 $
-- integral_I_n u_h v^'_h dif t + hat(U)_n v_h (t_n^-) - hat(U)_(n-1) v_h (t_(n-1)^+) + integral_I_n A u_h v_h dif t = integral_I_n f v_h dif t
+-integral_I_n u_h v^'_h dif t + hat(U)_n v_h (t_n^-) - hat(U)_(n-1) v_h (t_(n-1)^+) + integral_I_n A u_h v_h dif t = integral_I_n f v_h dif t
 $
-Equivalent formulation can be obtained by usign integration by parts again on the first integral
+
+Equivalent formulation can be obtained by usign integration by parts again on the first integral and by equivalent operations obtaining
 $
 integral_I_n u^'_h v_h dif t - u_h (t_n^-) v_h (t_n^-) + u_h (t_(n-1)^+) v_h (t_(n-1)^+) + hat(U)_n v_h (t_n^-) - hat(U)_(n-1) v_h (t_(n-1)^+) + \ quad +integral_I_n A u_h v_h dif t = integral_I_n f v_h dif t\
 integral_I_n u^'_h v_h dif t - u_h (t_n^-) v_h (t_n^-) + u_h (t_(n-1)^+) v_h (t_(n-1)^+) + u_h (t_n^-) v_h (t_n^-) - u_h (t_(n-1)) v_h (t_(n-1)^+) + \ quad +integral_I_n A u_h v_h dif t = integral_I_n f v_h dif t\
 integral_I_n u^'_h v_h dif t + [u_h (t_(n-1)^+) - u_h (t_(n-1)^-)] v_h (t_(n-1)^+) + integral_I_n A u_h v_h dif t = integral_I_n f v_h dif t\
-integral_I_n (u^'_h + A u_h)v_h dif t + [u_h (t_(n-1)^+) - u_h (t_(n-1)^-)] v_h (t_(n-1)^+) = integral_I_n f v_h dif t
+integral_I_n (u^'_h + A u_h)v_h dif t + [u_h (t_(n-1)^+) - u_h (t_(n-1)^-)] v_h (t_(n-1)^+) = integral_I_n f v_h dif t.
+$
+This equation contains a jump of $u_h$ on the left interface, we will denote it with $bracket.l.stroked u_h bracket.r.stroked_(n-1)$
+$
+bracket.l.stroked u bracket.r.stroked_n:= u(t_n^+) - u(t_n^-).
+$
+Substituting the jump we get the final #underline[strong] form
+$
+integral_I_n (u^'_h + A u_h)v_h dif t +  bracket.l.stroked u bracket.r.stroked_(n-1) v_h (t_(n-1)^+) = integral_I_n f v_h dif t.
+$
+
+To obtain the global discrete formulation we sum the local equations over all the intervals
+$
+sum_n^N integral_I_n -u_h v^'_h dif t + sum_n^(N-1) (hat(U)_(n+1) v_h (t_(n+1)^-) - hat(U)_(n) v_h (t_(n)^+)) + (u_h (t_(2)^-)v_h (t_(2)^-)-u_0 v_h (0^+)) +\ quad + sum_n^N integral_I_n A u_h v_h dif t = sum_n^N integral_I_n f v_h dif t,\
+sum_n^N integral_I_n (u^'_h + A u_h)v_h dif t + sum_n^(N-1) bracket.l.stroked u bracket.r.stroked_(n) v_h (t_(n)^+) + (u_h (0^+) - u_0)v_h (0^+) = sum_n^N integral_I_n f v_h dif t.
 $
 
 === Energy equivalence
+Taking $v_h = u_h$ and assuming $f =0$ in the discrete weak formulation we get
 $
-E = 1/2 u^2
+-integral_I_n u_h u_h^' dif t + hat(U)_n u_h (t_n^-) - hat(U)_(n-1) u_h (t_(n-1)^+) + A integral_I_n u_h^2 dif t = 0\
+-integral_I_n (u_h^2 /2)^' dif t + hat(U)_n u_h (t_n^-) - hat(U)_(n-1) u_h (t_(n-1)^+) + A integral_I_n u_h^2 dif t = 0\
+$
+Now we can simply evaluate the integral
+$
+-[u_h^2 /2]_(t_(n-1)^+)^(t_n^-)+ u_h (t_n^-) u_h (t_n^-) - u_h (t_(n-1)^-) u_h (t_(n-1)^+) + A integral_I_n u_h^2 dif t = 0\
+-(u_h^2 (t_n^-))/2 + (u_h^2 (t_(n-1)^+))/2 + u_h (t_n^-) u_h (t_n^-) - u_h (t_(n-1)^-) u_h (t_(n-1)^+) + A integral_I_n u_h^2 dif t = 0\
+(u_h^2 (t_n^-))/2 + (u_h^2 (t_(n-1)^+))/2  - u_h (t_(n-1)^-) u_h (t_(n-1)^+) + A integral_I_n u_h^2 dif t = 0\
+(u_h^2 (t_n^-))/2 - (u_h^2 (t_(n-1)^+))/2  +1/2( u_h (t_(n-1)^-) - u_h (t_(n-1)^+))^2 + A integral_I_n u_h^2 dif t = 0\
+$
+summing over all intervals gives
+$
+(u_h^2 (T^-))/2 - (u_h^2 (0^+))/2  +1/2 sum_n^N ( u_h (t_(n-1)^-) - u_h (t_(n-1)^+))^2 + A sum_n^N integral_I_n u_h^2 dif t = 0.
+$
+Consequently
+$
+(u_h^2 (T^-))/2 + A sum_n^N integral_I_n u_h^2 dif t lt.eq (u_h^2 (0^+))/2.
+$
+Which gives
+$
+u_h^2 (T^-) lt.eq u_h^2 (0^+), quad "assuming" A gt.eq 0
 $
 
 === Algorithm
@@ -260,7 +295,18 @@ $
 
 === A priori error estimation
 
+= Methods for solving ODEs
 
+== Runge-Kutta
 
+=== Explicit Runge-Kutta
+
+=== Embedded Runge-Kutta
+
+== Symplectic methods
+
+== Second oreder methods
+
+== Newmark methods
 
 = Discontinuous Galerkin method for parabolic PDE
