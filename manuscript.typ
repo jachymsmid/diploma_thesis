@@ -46,32 +46,6 @@
 
 = Discontinuous Galerkin Method for ODE 
 
-== Polynomial spaces
-
-=== Degrees of freedom
-
-=== Broken polynomial spaces
-
-#definition[Broken polynomial space][Given a mesh $cal(T)$ we define a broken polynomial space of order $p$ as a set
-$
-PP_p (cal(T)) = {v in L^2 (Omega) med : med v bar.v_K in PP_p (K), med forall K in cal(T)}
-$]
-
-#definition[Jump][Let $PP_p (cal(T))$ be a broken polynomial space on mesh $cal(T)$. A jump is defnied as
-$
-[u] = ...
-$]
-
-#definition[Trace][]
-
-#definition[Numerical trace][]
-
-#lemma[][
-$
-dim (PP_p (cal(T)) inter H^1 (cal(T))) = |cal(T)| dot.op p - 1
-$]
-
-
 == Weak formulation
 
 === Integration by parts (per-partes)
@@ -170,9 +144,7 @@ $tau_n$ is different for each $I_n$.
 
 === Reference element
 
-== Polynomials
-
-== Spaces
+== Function spaces
 
 === Lebesque space
 
@@ -198,6 +170,32 @@ $
 
 
 ]
+
+== Degrees of freedom
+
+=== Polynomial spaces
+
+=== Broken polynomial spaces
+
+#definition[Broken polynomial space][Given a mesh $cal(T)$ we define a broken polynomial space of order $p$ as a set
+$
+PP_p (cal(T)) = {v in L^2 (Omega) med : med v bar.v_K in PP_p (K), med forall K in cal(T)}
+$]
+
+#definition[Jump][Let $PP_p (cal(T))$ be a broken polynomial space on mesh $cal(T)$. A jump is defnied as
+$
+[u] = ...
+$]
+
+#definition[Trace][]
+
+#definition[Numerical trace][]
+
+#lemma[][
+$
+dim (PP_p (cal(T)) inter H^1 (cal(T))) = |cal(T)| dot.op p - 1
+$]
+
 
 
 == Numerical quadrature
@@ -297,6 +295,19 @@ $
 
 = Methods for solving ODEs
 
+== Numerical properties
+
+=== Stability
+
+=== Consistency
+
+=== Convergence
+
+#definition[][We say that a scheme converges in the maximum norm if
+$
+E_h = max_t |u(t)-u_h (t)| arrow.r 0 " for " h arrow.r 0
+$]
+
 == Runge-Kutta
 
 === Explicit Runge-Kutta
@@ -308,5 +319,3 @@ $
 == Second oreder methods
 
 == Newmark methods
-
-= Discontinuous Galerkin method for parabolic PDE
