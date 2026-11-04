@@ -44,6 +44,14 @@
 
 #pagebreak()
 
+#heading(level: 1, numbering: none, outlined: false, [Frequently used symbols:])
+
+$U$ - numerical solution\
+$u_n = u(t_n)$ - exact solution evaluated at node $t_n$\
+...
+
+#pagebreak()
+
 = Discontinuous Galerkin Method for ODE 
 
 == Weak formulation
@@ -51,7 +59,7 @@
 === Integration by parts (per-partes)
 
 #lemma[Integration by parts][
-  An integral of two functions $f$ and $g$ can be written as
+  todo: assumptions. An integral of two functions $f$ and $g$ can be written as
   $
   integral_Omega f g^' dif x = - integral_Omega f^' g dif x + [f g]bar.v_Omega.
   $
@@ -85,8 +93,13 @@ $
 is a weak derivative of $u$.
 ]
 
+=== Distributions
+
+=== Distributional (generalized) derivative
 
 === Weak formulation
+
+todo: some definition?
 
 To obtain the weak formulation of our problem we test with an infinitely differentiable funciton $v in C^infinity$
 $
@@ -122,6 +135,8 @@ $
 
 == Domain discretization
 
+todo: definitions
+
 To discretize the domain $Omega = chevron.l 0, T chevron.r$ we divide it into intervals
 $
 I_n = (t_n, t_(n+1)), quad n = 0,1,dots,N,
@@ -145,6 +160,8 @@ $tau_n$ is different for each $I_n$.
 === Reference element
 
 == Function spaces
+
+todo: finish this whole thing
 
 === Lebesque space
 
@@ -171,7 +188,7 @@ $
 
 ]
 
-== Degrees of freedom
+=== Degrees of freedom
 
 === Polynomial spaces
 
@@ -199,6 +216,8 @@ $]
 
 
 == Numerical quadrature
+
+todo: finish this whole thing
 
 === Radau quadrature
 
@@ -257,6 +276,116 @@ sum_n^N integral_I_n -u_h v^'_h dif t + sum_n^(N-1) (hat(U)_(n+1) v_h (t_(n+1)^-
 sum_n^N integral_I_n (u^'_h + A u_h)v_h dif t + sum_n^(N-1) bracket.l.stroked u bracket.r.stroked_(n) v_h (t_(n)^+) + (u_h (0^+) - u_0)v_h (0^+) = sum_n^N integral_I_n f v_h dif t.
 $
 
+=== Convergence for $p = 0$
+
+#definition[Convergence][
+  Let $u$ be an exact solution and $U$ be the numerical solution. We say that a numerical scheme with numerical step $h$ converges if
+  $
+  lim_(h arrow.r 0) norm(u - U) = 0.
+  $
+]
+
+#definition[Local approximation error][
+Let $u$ be the exact solution and $U_n = cal(H)_h U_(n-1)$ the numerical scheme in operator formulation. Local approximation error is then defined as
+$
+d_n = u(t_n) - cal(H)_h u
+$
+]
+
+#lemma[][The local approximation error of the DG method of order $p=0$ for the IVP
+$
+u^'+a u = f, quad a gt.eq 0, u(0) = u_0,
+$
+is bounded by
+$
+abs(d_n) lt.eq (M a k_n^2)/2.
+$]
+
+#proof[][
+...
+]
+
+#definition[Global error][
+...
+]
+
+#lemma[][The global error is bounded by ...]
+
+#theorem[][Let the exact solution $u in cal(C^1)$, then the DG method with order $p = 0$ converges for the equation
+$
+u^'+a u = f, quad a gt.eq 0, u(0) = u_0.
+$
+]
+
+#proof[][
+From the assumption that $u in cal(C^1)$ we can say that $|u^'| lt.eq M$ on a finite interval. Integrating $|u^'| lt.eq M$ from $t$ to $t_n$
+$
+integral_t^(t_n) |u^'| dif t lt.eq integral_t^(t_n) M dif t\
+abs(integral_t^(t_n) u^' dif t ) lt.eq integral_t^(t_n) |u^'| dif t lt.eq M(t_n - t)\
+abs(integral_t^(t_n) u^' dif t )  lt.eq M(t_n - t)\
+| [u]_t^(t_n) |  lt.eq M(t_n - t)\
+|u(t_n) - u(t)|  lt.eq M(t_n - t)\
+|u(t) - u(t_n)| lt.eq M h " on " I_n
+$
+This bound applies to the whole interval, and all intervals.
+
+Next integrate the original equation on the interval $I_n$
+$
+integral_I_n u^'+a u dif t = integral_I_n f dif t\
+u(t_n) - u(t_(n-1)) + integral_I_n a u dif t = integral_I_n f dif t
+$
+Define $d_n := u(t_n) - U_n = (1+a k_n) u(t_n) - u(t_(n-1)) - integral_I_n f dif t$. Subtracting the two equations we get
+$
+d_n = a k_n u(t_n) - a integral_I_n u dif t,
+$
+but because $u(t_n)$ is a constant we can write
+$
+d_n = a integral_I_n u(t_n) - u dif t
+$
+
+Now utilizing the inequality $|u(t_n) - u(t)|  lt.eq M(t_n - t)$ we obtained earlier. We integrate it over interval $I_n$
+$
+abs(integral_I_n u(t_n) - u(t) dif t) lt.eq integral_I_n |u(t_n) - u(t)| dif t  lt.eq  integral_I_n M(t_n - t) dif t quad \/ dot.op a\
+abs(a integral_I_n u(t_n) - u(t) dif t) lt.eq a integral_I_n M(t_n - t) dif t
+$
+but now the first integral is the $d_n$, substituting we get
+$
+abs(d_n) lt.eq a integral_I_n M(t_n - t) dif t = [M a ( t_n t - t^2/2)]_(t_(n-1))^t_n = M a ( t_n^2 - t_n^2/2 - t_n t_(n-1) + t_(n-1)^2/2) =\
+= M a 1/2 (t_n^2 - t_n t_(n-1) + t_(n-1)^2) = (M a k_n^2)/2
+$]
+
+#proof[continuation of the proof][Next define $e_n = u(t_n) - U_n$. We know that
+$
+u_n (1 + a k_n) - u_(n-1) = integral_I_n f dif t + d_n,\
+U_n (1 + a k_n) - U_(n-1) = integral_I_n f dif t.
+$
+Subtracting these two equations we get
+$
+u_n - U_n = (u_(n-1) - U_(n-1) + d_n)/(1+a k_n)\
+e_n = (e_(n-1) + d_n)/(1+a k_n)
+$
+Thus
+$
+abs(e_n) lt.eq abs((e_(n-1) + d_n)) lt.eq abs(e_(n-1)) + abs(d_n)
+$
+Now assume $e_0 = 0$, then
+$
+abs(e_1) lt.eq abs(d_1), quad abs(e_2) lt.eq abs(e_1) + abs(d_2) lt.eq abs(d_1) + abs(d_2) quad arrow.r.double quad abs(e_n) lt.eq sum_n abs(d_n)
+$
+And now because we have already bounded $d_n$
+$
+abs(e_n) lt.eq sum_n abs(d_n) lt.eq (M a)/2 sum_n k_n^2 lt.eq (M a h)/2 sum_n k_n lt.eq (M a h T)/2
+$
+And then
+$
+abs(u-U_n) = abs(u - u_n + u_n - U_n) lt.eq abs(u - u_n) + abs(u_n - U_n) lt.eq M h + (M a h T)/2 = M h (1 + (a T)/2)
+$
+and thus
+$
+lim_(h arrow.r 0) abs(u - U_n) = 0
+$
+]
+
 === Energy equivalence
 Taking $v_h = u_h$ and assuming $f =0$ in the discrete weak formulation we get
 $
@@ -283,15 +412,7 @@ $
 u_h^2 (T^-) lt.eq u_h^2 (0^+), quad "assuming" A gt.eq 0
 $
 
-=== Algorithm
-
-==== Results
-
 === Connection to Runge-Kutta methods
-
-=== Superconvergrence
-
-=== A priori error estimation
 
 = Methods for solving ODEs
 
@@ -302,11 +423,6 @@ $
 === Consistency
 
 === Convergence
-
-#definition[][We say that a scheme converges in the maximum norm if
-$
-E_h = max_t |u(t)-u_h (t)| arrow.r 0 " for " h arrow.r 0
-$]
 
 == Runge-Kutta
 
