@@ -34,16 +34,18 @@
 // definitions, theorems, ...
 #show: setup-frames
 
-#align(center,title())
+#align(center, title())
 
-// add some interesting picture
+// todo: add some interesting picture
 
 #pagebreak()
 
+// outline
 #outline()
 
 #pagebreak()
 
+// frequently used symbols
 #heading(level: 1, numbering: none, outlined: false, [Frequently used symbols:])
 
 $U$ - numerical solution\
@@ -51,6 +53,115 @@ $u_n = u(t_n)$ - exact solution evaluated at node $t_n$\
 ...
 
 #pagebreak()
+
+// todo: divide manuscript into multiple files
+= Methods for solving ODEs (initial value problems)
+
+Befor anything we have to state what problems we are going to be trying to solve. We will focus on solving ordinary differential equations with initial condition. As an initial value problem for a system of first order ODEs
+#numbered_eq($
+y_1^' = f_1 (x, y_1, ..., y_m),\
+y_2^' = f_2 (x, y_1, ..., y_m),\
+...\
+y_m^' = f_m (x, y_1, ..., y_m), quad x in chevron.l a, b chevron.r,
+$)
+we will understand finding the $m$ functions $y_1, y_2, ..., y_m$ of the variable $x$, defined, continuous and continuously differentiable on the interval $chevron.l a, b chevron.r$, that solve the equations and for which it holds that
+#numbered_eq(
+$
+y_1(xi) = eta_1, med y_2(xi) = eta_2, med ..., med y_m(xi) = eta_m,
+$)<initial_condition>
+where $(eta_1, eta_2, ..., eta_m)$ is an $m$-dimensional vector of values and $xi$ is a defined point in $chevron.l a, b chevron.r$, usually the left boundary point. The additional condition #ref(<initial_condition>) is often named the initial condition.
+
+
+#lemma[][Every ordinary differential equation of order $m$ can be restated as a system of equations of order 1.]
+
+#proof[][
+Suppose the ODE
+$
+y^(\(m\)) = f(x, y, y^', y^'', ..., y^(\(m-1\))).
+$
+Define new variables
+$
+y_1 := y,\
+y_2 := y_1^' quad (eq.triple y^''),\
+...\
+y_m := y_(m-1)^' quad (eq.triple y^(\(m-1\))).
+$
+Now we have got the system
+$
+y_1^' = y_2,\
+y_2^' = y_3,\
+...\
+y_m^' = f(x, y_1, y_2, ..., y_m) 
+$
+that is equal to the original equation.
+]
+
+Because of this lemma we are stating the initial value problem without any loss of generality.
+
+For simplicity we will usually use only one equation
+#numbered_eq(
+$
+y^' = f(x, y), quad y(a) = eta,
+$)<first_order_ode>
+but the generalization to a system is usally simple. The methods we are focusing on are discrete one step methods. Meaning we are solving the equations on a finite set of points inside the interval $chevron.l a,b chevron.r$ spaced with the integration step $h$, that need not be constant.
+
+#definition[Lipschitz continuous function][
+We say that a function $f(x,y)$ is Lipschitz continuous on the interval $I$ with respect to $y$ with a constant independant of $x$ if
+$
+abs(f(x,y)-f(x,z)) lt.eq L abs(y-z) quad forall x in I "and for all" y,z .
+$
+]
+
+About the right hand side $f$ of the #ref(<first_order_ode>) we will assume, that
+1. it is defined and continuous in $x in chevron.l a, b chevron.r$, $y in (-infinity, infinity)$,
+2. Lipschitz continuous with respect to $y$ with a constant independant of $x$.
+
+This ensures that the existence and uniqueness of the solution on the interval $x in chevron.l a, b chevron.r.$
+
+#lemma[][If $f$ has bounded partial derivation with respect to $y$ on the band $x in chevron.l a, b chevron.r$, $y in (-infinity, infinity)$, then it is Lipschitz continuous.]<lipschitz>
+
+#proof[][...]
+
+#remark[][From the #ref(<lipschitz>) we can see that any linear first order ODE is Lipschitz continuous.]
+
+
+== Numerical properties
+
+#definition[Total approximation error][
+Let $y$ be the exact solution and $y_n$ be the approximate numerical solution. Total approximation error is defined as
+$
+e_n = y_n - y(x_n).
+$]
+
+#definition[Convergence][]
+
+#definition[Speed of convergence][]
+
+#definition[Local approximation error][]
+
+#definition[Stability][]
+
+#definition[Total rounding error][]
+
+#definition[Local rounding error][]
+
+#definition[Consistence][]
+
+#theorem[Lax convergence theorem][]
+
+== General one step method
+
+== Runge-Kutta
+
+=== Explicit Runge-Kutta
+
+=== Embedded Runge-Kutta
+
+== Symplectic methods
+
+== Second oreder methods
+
+== Newmark methods
 
 = Discontinuous Galerkin Method for ODE 
 
@@ -414,24 +525,4 @@ $
 
 === Connection to Runge-Kutta methods
 
-= Methods for solving ODEs
 
-== Numerical properties
-
-=== Stability
-
-=== Consistency
-
-=== Convergence
-
-== Runge-Kutta
-
-=== Explicit Runge-Kutta
-
-=== Embedded Runge-Kutta
-
-== Symplectic methods
-
-== Second oreder methods
-
-== Newmark methods
