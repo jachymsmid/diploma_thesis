@@ -53,7 +53,7 @@
 }
 
 // numbered equations environment
-#let numbered_eq(content) = math.equation(block: true, numbering: "(1)", content)
+#let numbered_eq(content) = math.equation(block: true, numbering: "(1)", supplement: "eq.", content)
 
 // implication sign
 #let imply = $quad arrow.r.double quad$
