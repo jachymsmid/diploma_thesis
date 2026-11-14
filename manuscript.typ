@@ -24,8 +24,11 @@
   date: auto
 )
 
-// heading numbering
+// heading numbering style
 #set heading(numbering: clean_numbering("I.","1."))
+
+// numbered list numbering style
+#set enum(numbering: "(i.)")
 
 // align block equations
 #show math.equation.where(block: true): pad.with(left: 1cm)
@@ -61,7 +64,7 @@ Befor anything we have to state what problems we are going to be trying to solve
 #numbered_eq($
 y_1^' = f_1 (x, y_1, ..., y_m),\
 y_2^' = f_2 (x, y_1, ..., y_m),\
-...\
+dots.v\
 y_m^' = f_m (x, y_1, ..., y_m), quad x in chevron.l a, b chevron.r,
 $)
 we will understand finding the $m$ functions $y_1, y_2, ..., y_m$ of the variable $x$, defined, continuous and continuously differentiable on the interval $chevron.l a, b chevron.r$, that solve the equations and for which it holds that
@@ -83,14 +86,14 @@ Define new variables
 $
 y_1 := y,\
 y_2 := y_1^' quad (eq.triple y^''),\
-...\
+dots.v\
 y_m := y_(m-1)^' quad (eq.triple y^(\(m-1\))).
 $
 Now we have got the system
 $
 y_1^' = y_2,\
 y_2^' = y_3,\
-...\
+dots.v\
 y_m^' = f(x, y_1, y_2, ..., y_m) 
 $
 that is equal to the original equation.
@@ -103,53 +106,150 @@ For simplicity we will usually use only one equation
 $
 y^' = f(x, y), quad y(a) = eta,
 $)<first_order_ode>
-but the generalization to a system is usally simple. The methods we are focusing on are discrete one step methods. Meaning we are solving the equations on a finite set of points inside the interval $chevron.l a,b chevron.r$ spaced with the integration step $h$, that need not be constant.
+but the generalization to a system is usally simple.
 
-#definition[Lipschitz continuous function][
-We say that a function $f(x,y)$ is Lipschitz continuous on the interval $I$ with respect to $y$ with a constant independant of $x$ if
+The methods we are focusing on are discrete one step methods. Meaning we are solving the equations on a finite set of points $x_n, n = 0,1,...,N$ inside the interval $chevron.l a,b chevron.r$ spaced with the integration step $h_n$, that need not be constant.
+The discretization then looks like
 $
-abs(f(x,y)-f(x,z)) lt.eq L abs(y-z) quad forall x in I "and for all" y,z .
+x_n = x_(n-1) + h_n , quad  n = 0,1,...,N " such that " x_0 = a " and " x_N = b.
 $
-]
+But again, for simplicity we will usually use constant integration step $forall i (h_i = h)$, then the discretization gets simplified to
+$
+x_n = a + n h, quad n = 0,1,...,N " such that " x_0 = a " and " x_N = b.
+$
 
-About the right hand side $f$ of the #ref(<first_order_ode>) we will assume, that
-1. it is defined and continuous in $x in chevron.l a, b chevron.r$, $y in (-infinity, infinity)$,
-2. Lipschitz continuous with respect to $y$ with a constant independant of $x$.
+== Solution existence and uniqueness
 
-This ensures that the existence and uniqueness of the solution on the interval $x in chevron.l a, b chevron.r.$
+To prove existence and uniqueness of a solution for the initial value problem we have to first define some terms.
+
+#definition[Lipschitz continuous function][]
 
 #lemma[][If $f$ has bounded partial derivation with respect to $y$ on the band $x in chevron.l a, b chevron.r$, $y in (-infinity, infinity)$, then it is Lipschitz continuous.]<lipschitz>
 
+...
+
+#theorem[Picard-Lindelöf][
+Suppose $f in cal(C)(U,RR^n)$, where $U$ is an open subset of $RR^(n+1),$ and $(a, eta) in U.$ If $f$ is locally Lipschitz continuous in the second argument, uniformly with respect to the first, then there exists a unique local solution of the #ref(<first_order_ode>).
+]
+
 #proof[][...]
+
+#theorem[Peano][existence of solution, is it any useful?]
 
 #remark[][From the #ref(<lipschitz>) we can see that any linear first order ODE is Lipschitz continuous.]
 
+== General one-step method
 
-== Numerical properties
+General one-step method are characteristic that every approximate solution $y_n$ in $x_n$ can be computed only from knwing the values $x_n, y_n$ and $h.$ This relation put in formula could look like 
+#numbered_eq($
+y_(n+1) = y_n + h phi(x_n, y_n, h).
+$)<general_method>
 
 #definition[Total approximation error][
-Let $y$ be the exact solution and $y_n$ be the approximate numerical solution. Total approximation error is defined as
+Let $y$ be the exact solution and $y_n$ be the approximate numerical solution in the node $x_n$. Total approximation error is defined as
 $
 e_n = y_n - y(x_n).
 $]
 
-#definition[Convergence][]
+The only free parameter in a one-step method is the integration step $h$, we would like to express the error as a function of $h.$
 
-#definition[Speed of convergence][]
+#definition[Error estimate][
+Let $e_n$ be the total approximation error at node $x_n$ and $psi$ a positive real valued function. We say that $psi$ is an error estimate if it holds that
+$
+abs(e_n) lt.eq psi(h) " and " lim_(h arrow.r 0) psi = 0.
+$
+]
 
-#definition[Local approximation error][]
+#definition[Convergence][
+Let $e_n$ be the total approximation error on a mesh with $N$ nodes. A general one step method is convergent if and only if:
+$
+lim_(h arrow.r 0) norm(e_n) = 0, quad forall n lt.eq N.
+$
+]
+
+#remark[][If we can find an error estimate of the total approximation error then the method converges.]
+#proof[][
+Let $psi$ be an error estimate. From definition
+$
+abs(e_n) lt.eq psi(h) " and " lim_(h arrow.r 0) psi = 0
+$
+thus
+$
+lim_(h arrow.r 0) abs(e_n) lt.eq lim _(h arrow.r 0) psi = 0.
+$
+]
+
+#definition[Big O notation][
+Let $f$ be a real valued function on domain $D$ and let $g$, the comparison function, be a real valued non-negative defined on the same set $D.$ We write
+$
+f(x) = O(g(x)),
+$
+if there exists a real positive constant $M$, such that
+$
+abs(f(x)) lt.eq M g(x) quad forall x in D.
+$
+]
+
+#definition[Speed of convergence][
+Let $e_n$ be the total approximation error at the node $x_n$. If there exists a function $phi(dot.op)$ such that 
++ $lim_(h arrow.r 0) phi(h) = 0$
++ $lim_(h arrow.r 0) abs(e_n) = O(phi(h))$
+]
+
+Usually for these methods the function $phi$ is a polynomial.
+
+#definition[Asymptotic error estimate][
+Let $e_n$ be the total approximation error at node $x_n$ and let $eta$ be a real valued function. We say that $eta$ is a asymptotic error estimate if it holds that
+$
+lim_(h arrow.r 0) e_n/eta(h) = 1.
+$
+]
+
+#definition[Local approximation error][
+The local approximation error $L(y,h)$ is an error we would make if we plugged into the #ref(<general_method>, supplement: "formula") exact values and computed one step. We write
+$
+L(y,h) := y(x+h) - y(x) - h Phi (x, y(x), h).
+$
+]
+
+#definition[Order of a one-step method][
+Let $L(y,h)$ be the local approximation error of a one-step method with the intergration step $h$. The largest $p$ for which it holds that
+$
+L(y,h) = O(h^(p+1)),
+$
+is called the order of the method.
+]
+
+#theorem[][Let us have a general one-step method of order $p gt.eq 1$, thus for the local approximation error we can write 
+$
+abs(L(y,h)) lt.eq K h^(p+1).
+$
+Next let $Phi$ be the corresponding function, for which it holds
++ Function $Phi$ is defined and continuous on
+  $
+  cal(D) = \{(x,y,h): x in chevron.l a, b chevron.r, y in (-infinity, infinity), h in chevron.l 0, h_0 chevron.r\}
+  $
++ Function $Phi$ is Lipschitz continuous in $cal(D)$:
+  $
+  abs(Phi(x,y,h) - Phi(x,y^*,h)) lt.eq L abs(y-y^*).
+  $
+Then for the total approximation error it can be said that
+$
+abs(e_n) lt.eq (h^p K)/L (e^(L(x_n -a))-1)
+$
+for all $h$ small enough.
+]
+
+#proof[][]
+
 
 #definition[Stability][]
-
-#definition[Total rounding error][]
-
-#definition[Local rounding error][]
 
 #definition[Consistence][]
 
 #theorem[Lax convergence theorem][]
 
-== General one step method
+#proof[][]
 
 == Runge-Kutta
 
@@ -159,11 +259,11 @@ $]
 
 == Symplectic methods
 
-== Second oreder methods
+== Special Second order methods
 
-== Newmark methods
+=== Newmark methods
 
-= Discontinuous Galerkin Method for ODE 
+= Discontinuous Galerkin Method for ODE
 
 == Weak formulation
 
@@ -281,7 +381,6 @@ todo: finish this whole thing
   $
   L^2 (Omega) = {f med : med integral_Omega |f|^2 dif x < infinity}
   $
-  
 ]
 
 === Sobolev space
