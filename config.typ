@@ -1,3 +1,8 @@
+
+//
+// Typst set up to my liking
+//
+
 // theorems,...
 #import "@preview/frame-it:2.0.0":*
 #let (definition,) = frames(
@@ -14,6 +19,7 @@
   proof: ("Proof", gray),
   kind: "proof",
 )
+
 #let proof(..args) = {
   let pos = args.pos()
   let body = pos.pop() // The content block is always the last positional argument
@@ -48,6 +54,12 @@
   show: frame-style(styles.hint, kind: "example")
   show: frame-style(styles.hint, kind: "remark")
   show: frame-style(styles.hint, kind: "lemma")
+  show figure.where(kind: "definition"): set block(breakable: true)
+  show figure.where(kind: "theorem"): set block(breakable: true)
+  show figure.where(kind: "proof"): set block(breakable: true)
+  show figure.where(kind: "example"): set block(breakable: true)
+  show figure.where(kind: "remark"): set block(breakable: true)
+  show figure.where(kind: "lemma"): set block(breakable: true)
 
   doc
 }
@@ -57,6 +69,7 @@
 
 // implication sign
 #let imply = $quad arrow.r.double quad$
+#let varrho = $rho.alt$
 
 // clean numbering for headings
 #let clean_numbering(..schemes) = {
