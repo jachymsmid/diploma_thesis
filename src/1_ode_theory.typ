@@ -59,27 +59,17 @@ y^' = f(x, y), quad y(a) = eta,
 $)<first_order_ode>
 but the generalization to a system is usally simple.
 
-The methods we are focusing on are discrete one step methods. Meaning we are solving the equations on a finite set of points $x_n, n = 0,1,...,N$ inside the interval $chevron.l a,b chevron.r$ spaced with the integration step $h_n$, that need not be constant.
-The discretization then looks like
-$
-x_n = x_(n-1) + h_n , quad  n = 0,1,...,N " such that " x_0 = a " and " x_N = b.
-$
-But again, for simplicity we will usually use constant integration step $forall i (h_i = h)$, then the discretization gets simplified to
-$
-x_n = a + n h, quad n = 0,1,...,N " such that " x_0 = a " and " x_N = b.
-$
-
 == Solution existence and uniqueness
 
 To prove existence and uniqueness of a solution for the initial value problem we have to first define some terms.
 
 #theorem[Picard-Lindelöf][
-Suppose the initial value problem
+Consider the initial value problem
 $
-y^' = f(y) + g(x),\
-y(a) = eta.
+y^' = f(y(x),x),\
+y(x_0) = eta,
 $
-And suppose that $f$ is continuous, $(dif f)/(dif x)$ is continuous and $g$ is continuous.
+where $f: RR^n times I mapsto RR^n$, $I subset.eq RR$ is an open interval containing $x_0$, and $eta in RR^n$. And assume that $f$ is continuous and L-Lipschitz in the first argument.
 Then there exists $delta > 0$ such that there is a unique solution to the initial value problem
 on the interval $chevron.l -delta, delta chevron.r .$]
 
@@ -150,7 +140,8 @@ Let $x_0 in X$ be a fix point of $T.$ We claim that ${T^n (x)}$ converges to a f
   Now we would like to limit $varrho(x, T^k (x))$ because $c^n$ already goes to zero with $n.$ Via triangual inequality
   $
   varrho(x, T^k (x)) lt.eq varrho(x, T (x)) + varrho(T (x), T^2 (x)) + dots + varrho(T^(k-1) (x), T^k (x)) lt.eq\
-  lt.eq varrho(x, T(x)) + c varrho(x, T(x)) + dots + c^(k-1) varrho(x, T(x)) = varrho(x, T(x)) ( 1 + c + c^2 + dots + c^(k-1))
+  lt.eq varrho(x, T(x)) + c varrho(x, T(x)) + dots + c^(k-1) varrho(x, T(x))=\
+  = varrho(x, T(x)) ( 1 + c + c^2 + dots + c^(k-1))
   $
   but the ... in parentheses is just the sum of a geometric series thus
   $
@@ -183,31 +174,118 @@ Let $x_0 in X$ be a fix point of $T.$ We claim that ${T^n (x)}$ converges to a f
   $
 ]
 
-#lemma[][
-  Suppose that $f$ is continuous, $f'$ is continuous and $g$ is continuous on $RR$. For $delta_0 > 0$ on the space $cal(C)(chevron.l - delta_0, delta_0 chevron.r)$ we define a map $T$ on functions $y$ as follows
+#proof[Picard-Lindelof theorem][
+Rewrite the equation into its integral form
+$
+y(x)-y(x_0) = integral_(x_0)^x f(y(s), s) dif s,
+$
+plugging in the initial condition gives
+$
+y(x) = eta + integral_(x_0)^x f(y(s), s) dif s.
+$
+If a continuous function $y$ satisfies this integral equation, then the continuity of $f$ and the fundamental theorem of calculus imply
+$
+y^' = f(y(x), x).
+$
+Moreover evaluating $y$ at $x_0$ gives $y(x_0) = eta$, thus the IVP is equivalent to the integral equation.
+
++ Now define the Picard operator
+
+  Choose $delta > 0$ such that
   $
-  T(y)(x) = a + integral_0^x f(y(s)) + g(x) dif s
+  chevron.l h-delta, h+delta chevron.r subset I " and " L delta < 1.
   $
-  Let $a$ be a constant and set $r := abs(a) + 2.$ There exists a $delta > 0$ such that:
-+ The map $T$ maps the ball in the metric space $(cal(C)(chevron.l - delta, delta chevron.r), varrho)$ of radius $r$ and with center the constant function zero into itself. We write $B_r (0) = {y in C(chevron.l - delta, delta chevron.r) med : med varrho(y, 0) lt.eq r)}$ for this ball and so have that
+  Consider the space
   $
-  T: B_r (0) mapsto B_r (0)
+  X = cal(C)(chevron.l h-delta, h+delta chevron.r; RR^n)
   $
-+ The map is contracting on $B_r (0).$
+  equipped with the supremum norm
+  $
+  norm(y)_infinity = max_(abs(x) lt.eq h+delta) norm(y(x)).
+  $
+  The normed space $(X, norm(dot.op)_infinity)$ is a Banach space.
+
+  Define operator $T: X mapsto X$ by
+  $
+  T y(x) = eta integral_(x_0)^x f(y(s), s) dif s.
+  $
+
+  + Proof the operator is well defined
+
+    For every $y in X$, the mapping
+    $
+    s mapsto f(y(s), s)
+    $
+    is continuous, being composition of continuous functions.
+
+    This means that its integral is continuously differentiable, and in particular continuous. Therefore
+    $
+    T y in X.
+    $
+    Hence $T:X mapsto X$ is well defined.
+
+  + Proof the operator is a contraction
+
+    Let $y,z in X.$ For any $x in chevron.l h-delta, h+delta chevron.r,$ we have 
+    $
+    norm(T y (x) - T z (x)) &= norm(integral_(x_0)^x [f(y(s),s) - f(z(s),s)] dif s)\
+    &lt.eq abs(integral_(x_0)^x norm(f(y(s),s) - f(z(s),s))dif s)\
+    &lt.eq L integral_(min(x_0, x))^(max(x_0, x)) norm(f(y(s),s) - f(z(s),s)) dif s\
+    &lt.eq L delta norm(y - z)_infinity.
+    $
+    Taking the supremum over $x in chevron.l h-delta, h+delta chevron.r$ gives
+    $
+    norm(T y - T z )_infinity lt.eq L norm(y - z)_infinity.
+    $
+    Thus the $T: X mapsto X$ is contracting.
+
+  We have shown that the operator $T$ is well defined and contracting. Using the Banach fix point theorem we have shown that there exists and is unique a fix point of the operator $T.$
+
+  Therefore there exists a $y in X$ satisfying
+  $
+  T y = y.
+  $
+  From the definition of $T$
+  $
+  T y = eta + integral_(x_0)^x f(y(s),s) dif s.
+  $
+  Differentiating we obtain
+  $
+  dif/(dif x)T y(x) = y^' (x) = f(y(x), x)
+  $
+  and setting $x =x_0$
+  $
+  y(x_0) = eta.
+  $
+  Thus $y$ solves the original IVP and because the fix point is unique the solution is also unique on the interval $chevron.l h-delta, h+delta chevron.r$.
 ]
 
-#proof[][
-Let
-$
-L_1 = 
-$
+todo: extend to the whole open interval.
+
+#lemma[][
+Suppose a function $f(y,x),$ where $y in RR^n, x in I subset.eq RR$, $I$ is on open interval.  
+If $(partial f)/(partial y)$ is continuous then $f$ is L-Lipschitz in the second argument.
 ]
+
+#proof[][]
+
+
 
 == General one-step method
 
-General one-step method are characteristic that every approximate solution $y_n$ in $x_n$ can be computed only from knwing the values $x_n, y_n$ and $h.$ This relation put in formula could look like 
+The methods we are focusing on are discrete one step methods. Meaning we are solving the equations on a finite set of points $x_n, n = 0,1,...,N$ inside the interval $chevron.l a,b chevron.r$ spaced with the integration step $h_n > 0$, that need not be constant.
+The discretization then looks like
+$
+x_n = x_(n-1) + h_n , quad  n = 0,1,...,N " such that " x_0 = a " and " x_N = b.
+$
+For simplicity we will usually use constant integration step $forall i (h_i = h)$, then the discretization gets simplified to
+$
+x_n = a + n h, quad n = 0,1,...,N " such that " x_0 = a " and " x_N = b.
+$
+
+Denote by $y_n$ the approximate solution at point $x_n$. We compute every consequent $y_n$ using the reccurent formula
 #numbered_eq($
-y_(n+1) = y_n + h phi(x_n, y_n, h).
+y_(n+1) = y_n + h Phi(x_n, y_n, h).
 $)<general_method>
 
 #definition[Total approximation error][
@@ -226,13 +304,25 @@ $
 ]
 
 #definition[Convergence][
-Let $e_n$ be the total approximation error on a mesh with $N$ nodes. A general one step method is convergent if and only if:
+Suppose that $y$ is the exact solution. We say that a general one step method with the step $h$ and ... $Phi$ is convergent if
 $
-lim_(h arrow.r 0) norm(e_n) = 0, quad forall n lt.eq N.
+forall x in chevron.l a,b chevron.r thick : thick lim_(h arrow.r 0^+) y_n = y(x), thick x_n = x
+$
+]
+
+#definition[Convergence][
+Denote by $e(h)$ the maximal approximation error of a method with step $h$
+$
+e(h) = max_(x_n in chevron.l a,b chevron.r) abs(e(x)), thick x_n = a + h n.
+$
+We say that the method is convergent if
+$
+lim_(h arrow.r 0^+)e(h) = 0.
 $
 ]
 
 #remark[][If we can find an error estimate of the total approximation error then the method converges.]
+
 #proof[][
 Let $psi$ be an error estimate. From definition
 $
@@ -241,6 +331,35 @@ $
 thus
 $
 lim_(h arrow.r 0) abs(e_n) lt.eq lim _(h arrow.r 0) psi = 0.
+$
+]
+
+#lemma[][
+Let $A,B gt.eq 0, N gt.eq 1$ and suppose the following
+$
+abs(xi_(n+1)) lt.eq A abs(xi_n) + B, quad n = 0, 1, dots, N-1
+$
+Then $abs(xi_n)$ can be bound with
+$
+abs(xi_n) lt.eq A^n abs(xi_0) + cases((A^n-1)/(A-1)B quad &: quad A eq.not 1,B n &: quad A = 1)
+$
+]
+
+#proof[][
+
+Start with
+$
+abs(xi_(1)) lt.eq A abs(xi_0) + B\
+abs(xi_(2)) lt.eq A abs(xi_1) + B lt.eq A (A abs(xi_0) + B) + B\
+abs(xi_(3)) lt.eq A abs(xi_2) + B lt.eq A (A (A abs(xi_0) + B) + B) + B = A^3 abs(x_0) + A^2 B + A B + B.
+$
+Generalize for $n$
+$
+abs(xi_n) lt.eq A^n abs(xi_0) + B sum_(i = 0)^(n-1) A^i.
+$
+From the formula for a sum of a geometric series
+$
+abs(xi_n) lt.eq A^n abs(xi_0) + cases((A^n-1)/(A-1)B quad &: quad A eq.not 1,B n &: quad A = 1)
 $
 ]
 
@@ -289,12 +408,12 @@ is called the order of the method.
 $
 abs(L(y,h)) lt.eq K h^(p+1).
 $
-Next let $Phi$ be the corresponding function, for which it holds
-+ Function $Phi$ is defined and continuous on
+And assume $Phi$ to be
++  defined and continuous on
   $
   cal(D) = \{(x,y,h): x in chevron.l a, b chevron.r, y in (-infinity, infinity), h in chevron.l 0, h_0 chevron.r\}
   $
-+ Function $Phi$ is Lipschitz continuous in $cal(D)$:
++ L-Lipschitz in $cal(D)$ in the second argument
   $
   abs(Phi(x,y,h) - Phi(x,y^*,h)) lt.eq L abs(y-y^*).
   $
@@ -310,7 +429,12 @@ for all $h$ small enough.
 
 #definition[Stability][]
 
-#definition[Consistence][]
+#definition[Consistence][
+We say, that a one-step method for the @first_order_ode  is consitent if
+$
+Phi(x,y,0) = f(x,y), quad x in chevron.l a,b chevron.r, thick y in RR^n
+$
+]
 
 #theorem[Lax convergence theorem][]
 

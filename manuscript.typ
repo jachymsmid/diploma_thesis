@@ -28,7 +28,7 @@
 #set heading(numbering: clean_numbering("I.","1."))
 
 // numbered list numbering style
-#set enum(numbering: "(i.)")
+#set enum(numbering: "(i.),a)")
 
 // align block equations
 #show math.equation.where(block: true): pad.with(left: 1cm)
@@ -62,7 +62,7 @@ $u_n = u(t_n)$ - exact solution evaluated at node $t_n$\
 
 // todo: divide manuscript into multiple files
 
-#include("src/ode_theory.typ")
-#include("src/ode_dgm.typ")
+#include("src/1_ode_theory.typ")
+#include("src/2_ode_dgm.typ")
 
 
