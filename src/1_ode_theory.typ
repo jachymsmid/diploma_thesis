@@ -86,11 +86,11 @@ Suppose $(X, varrho)$ to be a metric space. A map $T: X mapsto X$ is called cont
 exists $c < 1$ such that $varrho(T(x), T(y)) lt.eq c varrho(x,y)$ for all $x, y in X.$
 ]
 
-#definition[Fix point][
-Suppose $T: X mapsto X.$ A fix point is a point $x in X$ such that $T(x) = x.$
+#definition[fixed point][
+Suppose $T: X mapsto X.$ A fixed point is a point $x in X$ such that $T(x) = x.$
 ]
 
-#lemma[][If $T: X mapsto X$ is a contracting map, then $T$ can have at most one fix point.] 
+#lemma[][If $T: X mapsto X$ is a contracting map, then $T$ can have at most one fixed point.] 
 
 #proof[][
 
@@ -104,7 +104,7 @@ Then from definition
 $
 varrho(T(y_1), T(y_2)) lt.eq c varrho(y_1, y_2)
 $
-but because $y_1$ and $y_2$ are fix points 
+but because $y_1$ and $y_2$ are fixed points 
 $
 varrho(y_1, y_2) lt.eq c varrho(y_1, y_2)
 $
@@ -123,11 +123,11 @@ $
 ]
 
 #theorem[][
-If $(X, varrho)$ is a Cauchy complete space and $T: X mapsto X$ is a contracting map, then $T$ has a unique fix point.
+If $(X, varrho)$ is a Cauchy complete space and $T: X mapsto X$ is a contracting map, then $T$ has a unique fixed point.
 ]
 
 #proof[][
-Let $x_0 in X$ be a fix point of $T.$ We claim that ${T^n (x)}$ converges to a fix point $T^n (x) arrow.r x_infinity " for " n arrow.r infinity.$
+Let $x_0 in X$ be a fixed point of $T.$ We claim that ${T^n (x)}$ converges to a fixed point $T^n (x) arrow.r x_infinity " for " n arrow.r infinity.$
 
 + First lets show that the sequence ${x_n}$ is Cauchy and thus convergent in $X.$
 
@@ -153,7 +153,7 @@ Let $x_0 in X$ be a fix point of $T.$ We claim that ${T^n (x)}$ converges to a f
   $
   for any $x$ we pick $varrho(x , T(x))$ is just a constant, thus we have showed that the sequence $T^n (x)$ is Cauchy for all $x in X.$
 
-+ Secondly, we need to show that the series converges to a fix point.
++ Secondly, we need to show that the series converges to a fixed point.
 
   We already know that the sequence is convergent so denote the limit
   $
@@ -239,7 +239,7 @@ Moreover evaluating $y$ at $x_0$ gives $y(x_0) = eta$, thus the IVP is equivalen
     $
     Thus the $T: X mapsto X$ is contracting.
 
-  We have shown that the operator $T$ is well defined and contracting. Using the Banach fix point theorem we have shown that there exists and is unique a fix point of the operator $T.$
+  We have shown that the operator $T$ is well defined and contracting. Using the Banach fixed point theorem we have shown that there exists and is unique a fixed point of the operator $T.$
 
   Therefore there exists a $y in X$ satisfying
   $
@@ -257,10 +257,10 @@ Moreover evaluating $y$ at $x_0$ gives $y(x_0) = eta$, thus the IVP is equivalen
   $
   y(x_0) = eta.
   $
-  Thus $y$ solves the original IVP and because the fix point is unique the solution is also unique on the interval $chevron.l h-delta, h+delta chevron.r$.
+  Thus $y$ solves the original IVP and because the fixed point is unique the solution is also unique on the interval $chevron.l h-delta, h+delta chevron.r$.
 ]
 
-todo: extend to the whole open interval.
+#corollary[][]
 
 #lemma[][
 Suppose a function $f(y,x),$ where $y in RR^n, x in I subset.eq RR$, $I$ is on open interval.  
@@ -343,7 +343,7 @@ Then $abs(xi_n)$ can be bound with
 $
 abs(xi_n) lt.eq A^n abs(xi_0) + cases((A^n-1)/(A-1)B quad &: quad A eq.not 1,B n &: quad A = 1)
 $
-]
+]<lemma1>
 
 #proof[][
 
@@ -424,7 +424,37 @@ $
 for all $h$ small enough.
 ]
 
-#proof[][]
+#proof[][
+We know that
+$
+e_0 = y_0 - y(x_0) = 0.
+$
+We also have the equations
+$
+y_(n+1) = y_(n) + h Phi(x_n, y_n, h)\
+y(x_(n+1)) = y(x_n) + h Phi(x_n, y(x_n), h) + h delta_n,
+$
+where
+$
+delta_n = Delta(x_n, y(x_n),h) - Phi(x_n, y(x_n),h),\
+Delta(x, y(x),h) = (y(x+h)-y(x))/h
+$
+Subtracting the second equation from the first
+$
+y_(n+1) -y(x_(n+1)) = y_(n) - y(x_n)+ h Phi(x_n, y_n, h) - h Phi(x_n, y(x_n), h)-\
+quad - h Delta(x_n, y(x_n),h) - h Phi(x_n, y(x_n),h)\
+e_(n+1) lt.eq e_n + h L abs(y_n - y(x_n)) - K h^(p+1) = e_n (1+h L) + K h^(p+1) 
+$
+Using the @lemma1 we obtain
+$
+e_n &lt.eq (1+h L)^n e_0 + K h^(p+1) ((1+h L)^n -1)/(h L) = K h^(p+1) ((1+h L)^n -1)/(h L)lt.eq\
+    &lt.eq K h^(p+1) ((1+h L)^n -1)/(h L) lt.eq K h^p (e^(L h n)-1)/L = K h^p (e^(L(x_n - a))-1)/L
+$
+Yielding the final bound
+$
+e_n lt.eq K h^p (e^(L(x_n - a))-1)/L
+$
+]
 
 
 #definition[Stability][]
@@ -442,11 +472,25 @@ $
 
 == Runge-Kutta
 
+For Runge-Kutta methods the function $Phi$ looks like
+$
+Phi(x,y,h) = sum_(i=1)^P w_i k_i(x,y,h),
+$
+where
+$
+k_i(x,y,h) = f(x+alpha_i h, y + h sum_(j=1)^(i-1)beta_(i j)k_j(x,y,h)).
+$
+Here $P, w_i, alpha_i, beta_(i j)$ are constants choosen such that the method is of order $p.$
+
 === Explicit Runge-Kutta
+
+For explicit Runge-Kutta methods the matrix $beta_(i j)$ is strictly lower trianugular.
 
 === Embedded Runge-Kutta
 
-== Symplectic methods
+=== Implicit Runge-Kutta
+
+== Symplectic and energy conservative methods
 
 == Special Second order methods
 

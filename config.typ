@@ -13,7 +13,10 @@
   theorem: ("Theorem",gray),
   kind: "theorem",
 )
-
+#let (corollary,) = frames(
+  corollary: ("Corollary",gray),
+  kind: "corollary",
+)
 // proof setup to add qed at the end of every proof
 #let (proof: _raw-proof,) = frames(
   proof: ("Proof", gray),
@@ -53,6 +56,7 @@
   show: frame-style(styles.hint, kind: "proof")
   show: frame-style(styles.hint, kind: "example")
   show: frame-style(styles.hint, kind: "remark")
+  show: frame-style(styles.hint, kind: "corollary")
   show: frame-style(styles.hint, kind: "lemma")
   show figure.where(kind: "definition"): set block(breakable: true)
   show figure.where(kind: "theorem"): set block(breakable: true)
@@ -60,6 +64,7 @@
   show figure.where(kind: "example"): set block(breakable: true)
   show figure.where(kind: "remark"): set block(breakable: true)
   show figure.where(kind: "lemma"): set block(breakable: true)
+  show figure.where(kind: "corollary"): set block(breakable: true)
 
   doc
 }
