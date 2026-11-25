@@ -28,7 +28,7 @@
 #set heading(numbering: clean_numbering("I.","1."))
 
 // numbered list numbering style
-#set enum(numbering: "(i.),a)")
+#set enum(numbering: "(1.i.a.)")
 
 // align block equations
 #show math.equation.where(block: true): pad.with(left: 1cm)

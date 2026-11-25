@@ -189,19 +189,19 @@ y^' = f(y(x), x).
 $
 Moreover evaluating $y$ at $x_0$ gives $y(x_0) = eta$, thus the IVP is equivalent to the integral equation.
 
-+ Now define the Picard operator
++ Define the Picard operator
 
   Choose $delta > 0$ such that
   $
   chevron.l h-delta, h+delta chevron.r subset I " and " L delta < 1.
   $
-  Consider the space
+  Denote the interval $chevron.l h-delta, h+delta chevron.r$ with $D.$ Consider the space
   $
-  X = cal(C)(chevron.l h-delta, h+delta chevron.r; RR^n)
+  X = cal(C)(D; RR^n)
   $
   equipped with the supremum norm
   $
-  norm(y)_infinity = max_(abs(x) lt.eq h+delta) norm(y(x)).
+  norm(y)_infinity = max_(x in D) norm(y(x)).
   $
   The normed space $(X, norm(dot.op)_infinity)$ is a Banach space.
 
@@ -210,36 +210,69 @@ Moreover evaluating $y$ at $x_0$ gives $y(x_0) = eta$, thus the IVP is equivalen
   T y(x) = eta integral_(x_0)^x f(y(s), s) dif s.
   $
 
-  + Proof the operator is well defined
+  + Proove the operator is well defined
 
-    For every $y in X$, the mapping
-    $
-    s mapsto f(y(s), s)
-    $
-    is continuous, being composition of continuous functions.
+    + $T y$ exists for all $x in D$
+      
+      Choose some $y in X$, from the definiotion of $X$ the function $y$ is continuous. The function $f(x, y(x))$ is also continuous, from assumptions.
+      Now consider the integrand in the operator
+      $
+      g(s) := f(s, y(s)),
+      $
+      we want to show, that it is continuous.
 
-    This means that its integral is continuously differentiable, and in particular continuous. Therefore
-    $
-    T y in X.
-    $
-    Hence $T:X mapsto X$ is well defined.
+      Define
+      $
+      phi = D mapsto I times RR^n
+      $
+      This function is continuous, because
+      $
+      &s mapsto s quad &"trivialy",\
+      &s mapsto y(s) quad &y in X.
+      $
+      Now
+      $
+      g(s) = f circle.small phi = f(phi(s)), quad s in D.
+      $
+      A composition of continuous function is also continuous, thus $g$ is also continuous.
 
-  + Proof the operator is a contraction
+      Every continuous function on a compact interval is integrable, thus $T y$ exists on $D.$
 
-    Let $y,z in X.$ For any $x in chevron.l h-delta, h+delta chevron.r,$ we have 
+    + $T y$ is continuous
+
+      Recall that
+      $
+      T y = eta + integral_(x_0)^x f(s, y(s)) dif s.
+      $
+      Since $f(x, y(x))$ is continuous
+      $
+      (dif)/(dif x) integral_(x_0)^x f(s, y(s)) dif s = f(x, y(x)).
+      $
+      Therefore
+      $
+      (dif)/(dif x) T y = f(x, y(x)), quad x in D.
+      $
+      Since every differentiable function is continuous, the function $T y$ is continuous.
+
+
+
+  + Proove the operator is contracting
+
+    Let $y,z in X.$ For any $x in D$ we have 
     $
     norm(T y (x) - T z (x)) &= norm(integral_(x_0)^x [f(y(s),s) - f(z(s),s)] dif s)\
     &lt.eq abs(integral_(x_0)^x norm(f(y(s),s) - f(z(s),s))dif s)\
     &lt.eq L integral_(min(x_0, x))^(max(x_0, x)) norm(f(y(s),s) - f(z(s),s)) dif s\
     &lt.eq L delta norm(y - z)_infinity.
     $
-    Taking the supremum over $x in chevron.l h-delta, h+delta chevron.r$ gives
+    Taking the supremum over $x in D$ gives
     $
     norm(T y - T z )_infinity lt.eq L norm(y - z)_infinity.
     $
     Thus the $T: X mapsto X$ is contracting.
 
-  We have shown that the operator $T$ is well defined and contracting. Using the Banach fixed point theorem we have shown that there exists and is unique a fixed point of the operator $T.$
+  We have shown that the operator $T$ is well defined and contracting.
+  Using the Banach fixed point theorem, there exists and is unique a fixed point of the operator $T.$
 
   Therefore there exists a $y in X$ satisfying
   $
@@ -257,14 +290,14 @@ Moreover evaluating $y$ at $x_0$ gives $y(x_0) = eta$, thus the IVP is equivalen
   $
   y(x_0) = eta.
   $
-  Thus $y$ solves the original IVP and because the fixed point is unique the solution is also unique on the interval $chevron.l h-delta, h+delta chevron.r$.
+  Thus $y$ solves the original IVP and because the fixed point is unique the solution is also unique on the interval $D = chevron.l x_0-delta, x_0+delta chevron.r.$
 ]
 
-#corollary[][]
+#theorem[Global existence and uniqueness][]
 
 #lemma[][
 Suppose a function $f(y,x),$ where $y in RR^n, x in I subset.eq RR$, $I$ is on open interval.  
-If $(partial f)/(partial y)$ is continuous then $f$ is L-Lipschitz in the second argument.
+If $(partial f)/(partial y)$ is continuous then $f$ is L-Lipschitz in $y.$
 ]
 
 #proof[][]
