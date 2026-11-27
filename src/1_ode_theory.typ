@@ -213,7 +213,7 @@ Moreover evaluating $y$ at $x_0$ gives $y(x_0) = eta$, thus the IVP is equivalen
   + Proove the operator is well defined
 
     + $T y$ exists for all $x in D$
-      
+
       Choose some $y in X$, from the definiotion of $X$ the function $y$ is continuous. The function $f(x, y(x))$ is also continuous, from assumptions.
       Now consider the integrand in the operator
       $
@@ -296,11 +296,47 @@ Moreover evaluating $y$ at $x_0$ gives $y(x_0) = eta$, thus the IVP is equivalen
 #theorem[Global existence and uniqueness][]
 
 #lemma[][
-Suppose a function $f(y,x),$ where $y in RR^n, x in I subset.eq RR$, $I$ is on open interval.  
-If $(partial f)/(partial y)$ is continuous then $f$ is L-Lipschitz in $y.$
+Suppose a function $f(y,x),$ where $f: RR^n times RR mapsto RR^n$.
+If $(partial f)/(partial y)$ is continuous, then $f$ is L-Lipschitz in $y$ on a compact interval $D subset RR^n times RR.$
 ]
 
-#proof[][]
+#proof[][
+Denote
+$
+L := max_((y,x) in D) norm(partial/(partial y)f(y,x)),
+$
+this value exists, because $D$ is compact and $f$ is continuous. We can also write 
+$
+norm(partial/(partial y)f(y,x)) lt.eq L quad forall (y,x) in D.
+$
+Let $D := chevron.l a,b chevron.r times chevron.l c,d chevron.r$. Take some $x in chevron.l c,d chevron.r$ and define
+$
+g: chevron.l a,b chevron.r mapsto RR^n, quad g(y) := f(x,y).
+$
+It holds that
+$
+g^' = (dif)/(dif y) g(y) = (partial)/(partial y)f(x,y)
+$
+
+Now apply the mean value theorem. Take $y_1,y_2 in chevron.l a,b chevron.r, y_1 < y_2.$ There exists $xi in chevron.l y_1,y_2 chevron.r$ such that
+$
+g(y_1) - g(y_2) = g^' (xi) (y_2 - y_1).
+$
+Substituting for $g$
+$
+f(y_1, x) - f(y_2, x) = (partial f)/(partial y)(xi, x) (y_2 - y_1).
+$
+Taking a norm of the expression
+$
+norm(f(y_1, x) - f(y_2, x)) &= norm((partial f)/(partial y)(xi, x) (y_2 - y_1))\
+&lt.eq norm(L (y_2 - y_1)) = L norm(y_2 - y_1)
+$
+Since the points $x, y_1, y_2$ were chosen arbitrarily and $L$ is independent of their choice, we can conclude that
+$
+norm(f(y_1, x) - f(y_2, x)) lt.eq L norm(y_2 - y_1).
+$
+
+]
 
 
 
